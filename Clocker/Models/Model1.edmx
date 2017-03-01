@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Model1StoreContainer">
+    <EntitySet Name="Individuals" EntityType="Model1.Store.Individuals" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Groups" EntityType="Model1.Store.Groups" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ClockerIndivs" EntityType="Model1.Store.ClockerIndivs" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ClockerGroups" EntityType="Model1.Store.ClockerGroups" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="Entity2Entity1" Association="Model1.Store.Entity2Entity1">
+      <End Role="Entity2" EntitySet="ClockerGroups" />
+      <End Role="Entity1" EntitySet="ClockerIndivs" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Individuals">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TrackedDollars" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GroupID" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Groups">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StartTime" Type="time" Nullable="false" />
+    <Property Name="EndTime" Type="time" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ClockerIndivs">
+    <Key>
+      <PropertyRef Name="IndivID" />
+    </Key>
+    <Property Name="IndivID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Points" Type="int" Nullable="false" />
+    <Property Name="GroupID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ClockerGroups">
+    <Key>
+      <PropertyRef Name="GroupID" />
+    </Key>
+    <Property Name="GroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StartTime" Type="time" Nullable="false" />
+    <Property Name="EndTime" Type="time" Nullable="false" />
+    <Property Name="CurrencyType" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="Entity2Entity1">
+    <End Role="Entity2" Type="Model1.Store.ClockerGroups" Multiplicity="1" />
+    <End Role="Entity1" Type="Model1.Store.ClockerIndivs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Entity2">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="Entity1">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model1" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="Model1Container" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Individuals" EntityType="Model1.Individual" />
+          <EntitySet Name="Groups" EntityType="Model1.Group" />
+          <EntitySet Name="ClockerIndivs" EntityType="Model1.ClockerIndiv" />
+          <EntitySet Name="ClockerGroups" EntityType="Model1.ClockerGroup" />
+          <AssociationSet Name="Entity2Entity1" Association="Model1.Entity2Entity1">
+            <End Role="Entity2" EntitySet="ClockerGroups" />
+            <End Role="Entity1" EntitySet="ClockerIndivs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Individual">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TrackedDollars" Type="String" Nullable="false" />
+          <Property Name="GroupID" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartTime" Type="Time" Nullable="false" />
+          <Property Name="EndTime" Type="Time" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ClockerIndiv">
+          <Key>
+            <PropertyRef Name="IndivID" />
+          </Key>
+          <Property Name="IndivID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Points" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="GroupID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Entity2" Relationship="Model1.Entity2Entity1" FromRole="Entity1" ToRole="Entity2" />
+        </EntityType>
+        <EntityType Name="ClockerGroup">
+          <Key>
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Name="GroupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartTime" Type="Time" Nullable="false" />
+          <Property Name="EndTime" Type="Time" Nullable="false" />
+          <NavigationProperty Name="Entity1" Relationship="Model1.Entity2Entity1" FromRole="Entity2" ToRole="Entity1" />
+          <Property Name="CurrencyType" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="Entity2Entity1">
+          <End Type="Model1.ClockerGroup" Role="Entity2" Multiplicity="1" />
+          <End Type="Model1.ClockerIndiv" Role="Entity1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entity2">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="Entity1">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Model1StoreContainer" CdmEntityContainer="Model1Container">
+    <EntitySetMapping Name="Individuals">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Individual)">
+        <MappingFragment StoreEntitySet="Individuals">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TrackedDollars" ColumnName="TrackedDollars" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Groups">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Group)">
+        <MappingFragment StoreEntitySet="Groups">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClockerIndivs">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.ClockerIndiv)">
+        <MappingFragment StoreEntitySet="ClockerIndivs">
+          <ScalarProperty Name="IndivID" ColumnName="IndivID" />
+          <ScalarProperty Name="Points" ColumnName="Points" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClockerGroups">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.ClockerGroup)">
+        <MappingFragment StoreEntitySet="ClockerGroups">
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="CurrencyType" ColumnName="CurrencyType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
