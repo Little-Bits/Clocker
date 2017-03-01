@@ -7,7 +7,7 @@
     <h1>Clocker</h1>
     <p class="lead">Welcome to clocker! Please sign in to start clocking your hours! Don't do too little or your hard earned cash goes into the punishiment piggy bank!</p>
     
-    <h2><time>00:00:00</time></h2>
+    <h2><time>04:00:00</time></h2>
     <button id="start">start</button>
     <button id="stop">stop</button>
     <button id="clear">clear</button>
@@ -17,9 +17,11 @@
                 start = document.getElementById('start'),
                 stop = document.getElementById('stop'),
                 clear = document.getElementById('clear'),
-                seconds = 0, minutes = 0, hours = 0,
+                seconds = 0, minutes = 0, hours = 3,
+                isRunning = false,
                 t;
 
+            /* increments timer */
             function add() {
                 seconds++;
                 if (seconds >= 60) {
@@ -35,24 +37,49 @@
 
                 timer();
             }
-            function timer() {
-                t = setTimeout(add, 1000);
+
+            /* decrements timer */
+            function subtract() {
+                seconds--;
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                    if (minutes < 0) {
+                        minutes = 59;
+                        hours--;
+                    }
+                }
+
+                h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+
+                timer();
             }
-            timer();
+            function timer() {
+                t = setTimeout(subtract, 1000);
+            }
+            /* enable following line to start timer automatically */
+            //timer(); 
 
 
             /* Start button */
-            start.onclick = timer;
+            start.onclick = function () {
+                if (!isRunning) {
+                    timer();
+                    isRunning = true;
+                }
+            }
 
             /* Stop button */
             stop.onclick = function () {
                 clearTimeout(t);
+                isRunning = false;
             }
 
             /* Clear button */
             clear.onclick = function () {
-                h1.textContent = "00:00:00";
-                seconds = 0; minutes = 0; hours = 0;
+                h1.textContent = "03:00:00";
+                seconds = 0; minutes = 0; hours = 3;
+                isRunning = false;
             }
         });
     </script>
